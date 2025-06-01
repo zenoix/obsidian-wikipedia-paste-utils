@@ -3,7 +3,8 @@ import {
 	Plugin,
 } from "obsidian";
 
-const WIKIPEDIA_LINK_SELECTOR = '[href*=".wikipedia.org/wiki/"]'
+const WIKIPEDIA_LINK_SELECTOR = 'a,[href*=".wikipedia.org/wiki/"]'
+const WIKIPEDIA_CITATION_SELECTOR = 'sup,.reference,[id^="cite_ref"]'
 
 export default class WikipediaLatexPastePlugin extends Plugin {
 	parser = new DOMParser()
@@ -44,7 +45,15 @@ export default class WikipediaLatexPastePlugin extends Plugin {
 				}
 				else {
 					console.log("does not have wikipedia link")
-					return
+				}
+
+
+				if (doesDocumentHaveCitations(toPasteHTML)) {
+					console.log("has citations")
+					toPasteHTML = removeCitations(toPasteHTML)
+				}
+				else {
+					console.log("does not have citations")
 				}
 
 				console.log("after HTML:\n", toPasteHTML)
@@ -76,3 +85,13 @@ function replaceWikipediaLinks(document: Document): Document {
 	return document
 }
 
+function doesDocumentHaveCitations(document: Document): boolean {
+	return document.querySelectorAll(WIKIPEDIA_CITATION_SELECTOR).length > 0
+}
+
+function removeCitations(document: Document): Document {
+	for (const citation of document.querySelectorAll(WIKIPEDIA_CITATION_SELECTOR)) {
+		citation.remove()
+	}
+	return document
+}
