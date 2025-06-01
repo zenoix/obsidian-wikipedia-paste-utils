@@ -1,0 +1,105 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "last_modified": "2025-05-31T03:30:20Z",
+      "resolved": "github:NixOS/nixpkgs/59138c7667b7970d205d6a05a8bfa2d78caa3643?lastModified=1748662220&narHash=sha256-7gGa49iB9nCnFk4h%2Fg9zwjlQAyjtpgcFkODjcOQS0Es%3D"
+    },
+    "pnpm@latest": {
+      "last_modified": "2025-05-16T20:19:48Z",
+      "resolved": "github:NixOS/nixpkgs/12a55407652e04dcf2309436eb06fef0d3713ef3#pnpm",
+      "source": "devbox-search",
+      "version": "10.11.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/b39q8x9cxlqq45zgvn9bqcv2f2633vhx-pnpm-10.11.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/b39q8x9cxlqq45zgvn9bqcv2f2633vhx-pnpm-10.11.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/rvikpxf1ikq4dy7n64bw30hx2ig7zwjk-pnpm-10.11.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/rvikpxf1ikq4dy7n64bw30hx2ig7zwjk-pnpm-10.11.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/m4qnhm8ij69r70wf6qdbbhd9yw30pv00-pnpm-10.11.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/m4qnhm8ij69r70wf6qdbbhd9yw30pv00-pnpm-10.11.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/29gsr1mhy2xgah3s86aqg7wspmvqjp4m-pnpm-10.11.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/29gsr1mhy2xgah3s86aqg7wspmvqjp4m-pnpm-10.11.0"
+        }
+      }
+    },
+    "typescript@latest": {
+      "last_modified": "2025-05-16T20:19:48Z",
+      "resolved": "github:NixOS/nixpkgs/12a55407652e04dcf2309436eb06fef0d3713ef3#typescript",
+      "source": "devbox-search",
+      "version": "5.8.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/cw0dghf6idlcppanwx7ym4gjcbm4q6p0-typescript-5.8.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/cw0dghf6idlcppanwx7ym4gjcbm4q6p0-typescript-5.8.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/d43ars224bsqjda7nyywhfd92hyxhz5z-typescript-5.8.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/d43ars224bsqjda7nyywhfd92hyxhz5z-typescript-5.8.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/wcjv916ym2qnf4qnzdn8axsyvs4qppmz-typescript-5.8.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/wcjv916ym2qnf4qnzdn8axsyvs4qppmz-typescript-5.8.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/dnw8h2z6jdj80h5x6g2q16fk3z1sbfjb-typescript-5.8.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/dnw8h2z6jdj80h5x6g2q16fk3z1sbfjb-typescript-5.8.2"
+        }
+      }
+    }
+  }
+}
