@@ -13,9 +13,9 @@ export default class WikipediaLatexPastePlugin extends Plugin {
 
 				console.log("paste detected");
 
-				let pasted = evt.clipboardData?.getData("text")
-
-				if (pasted == null || pasted.length == 0) { return }
+				// Wikipedia stores html data when copying
+				const pasted = evt.clipboardData?.getData("text/html")
+				if (pasted == null || pasted?.length == 0) { return }
 
 				const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 
