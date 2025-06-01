@@ -1,9 +1,9 @@
 {
-	"id": "obsidian-wikipedia-latex-paste",
-	"name": "Wikipedia Latex Paste",
+	"id": "obsidian-wikipedia-paste-utils",
+	"name": "Wikipedia Paste Utilities",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Automatically change Wikipedia's latex into Obsidian latex when pasting into a note.",
+	"description": "A few useful utilities for pasting text from Wikipedia.",
 	"author": "zenoix",
 	"authorUrl": "https://www.zenoix.com",
 	"fundingUrl": "",
