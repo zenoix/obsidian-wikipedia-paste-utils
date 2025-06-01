@@ -13,6 +13,7 @@
     "strictNullChecks": true,
     "lib": [
       "DOM",
+	  "DOM.ITERABLE",
       "ES5",
       "ES6",
       "ES7"
