@@ -3,7 +3,11 @@ import {
 	Plugin,
 } from "obsidian";
 
+const WIKIPEDIA_LINK_SELECTOR = '[href*=".wikipedia.org/wiki/"]'
+
 export default class WikipediaLatexPastePlugin extends Plugin {
+	parser = new DOMParser()
+
 	async onload() {
 		console.log("plugin started");
 
@@ -11,24 +15,44 @@ export default class WikipediaLatexPastePlugin extends Plugin {
 			this.app.workspace.on("editor-paste", (evt) => {
 				if (evt.defaultPrevented) { return }
 
-				console.log("paste detected");
-
-				// Wikipedia stores html data when copying
-				const pasted = evt.clipboardData?.getData("text/html")
-				if (pasted == null || pasted?.length == 0) { return }
-
 				const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 
 				// Make sure the user is editing a Markdown file.
-				if (view) {
-					const modifiedPasted = replaceWikipediaLatex(pasted)
-					console.log(`original text: ${pasted}, modified text: ${modifiedPasted}`)
+				if (!view) {
+					return
+				}
 
-					view.editor.replaceSelection(modifiedPasted);
+				const pastedPlain = evt.clipboardData?.getData("text/plain")
 
-					evt.preventDefault()
+				// Wikipedia stores html data when copying
+				const pastedHTML = evt.clipboardData?.getData("text/html")
+
+				// Check if the paste only contains plain text
+				if (pastedHTML == null || pastedHTML?.length == 0) {
+					console.log(`non-html paste detected: ${pastedPlain}`)
+					return
+				}
+
+				let toPasteHTML = this.parser.parseFromString(pastedHTML, "text/html")
+
+				console.log(`before HTML:\n`, toPasteHTML)
+
+				if (doesDocumentHaveWikipediaLinks(toPasteHTML)) {
+					console.log("has wikipedia link")
+					toPasteHTML = replaceWikipediaLinks(toPasteHTML)
 
 				}
+				else {
+					console.log("does not have wikipedia link")
+					return
+				}
+
+				console.log("after HTML:\n", toPasteHTML)
+
+				view.editor.replaceSelection(toPasteHTML.body.getText());
+
+				evt.preventDefault()
+
 			})
 		);
 	}
@@ -38,7 +62,17 @@ export default class WikipediaLatexPastePlugin extends Plugin {
 	}
 }
 
-function replaceWikipediaLatex(text: string): string {
-	return ""
+function doesDocumentHaveWikipediaLinks(document: Document): boolean {
+	return document.querySelectorAll(WIKIPEDIA_LINK_SELECTOR).length > 0
+}
+
+function replaceWikipediaLinks(document: Document): Document {
+	for (const link of document.querySelectorAll(WIKIPEDIA_LINK_SELECTOR)) {
+		const linkTitle = link.getAttribute("title")
+		const linkText = link.getText()
+		link.replaceWith(`[[${linkTitle}|${linkText}]]`)
+	}
+
+	return document
 }
 
