@@ -1,7 +1,7 @@
 import { MarkdownView, Plugin } from "obsidian";
 
-const WIKIPEDIA_LINK_SELECTOR = 'a,[href*=".wikipedia.org/wiki/"]';
-const WIKIPEDIA_CITATION_SELECTOR = 'sup,.reference,[id^="cite_ref"]';
+const WIKIPEDIA_LINK_SELECTOR = 'a[href*=".wikipedia.org/wiki/"]';
+const WIKIPEDIA_CITATION_SELECTOR = 'sup.reference[id^="cite_ref"]';
 
 export default class WikipediaLatexPastePlugin extends Plugin {
 	parser = new DOMParser();
