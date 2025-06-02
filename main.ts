@@ -41,19 +41,15 @@ export default class WikipediaLatexPastePlugin extends Plugin {
 
 				console.log(`before HTML:\n`, toPasteHTML);
 
-				if (doesDocumentHaveWikipediaLinks(toPasteHTML)) {
-					console.log("has wikipedia link");
-					toPasteHTML = replaceWikipediaLinks(toPasteHTML);
-				} else {
-					console.log("does not have wikipedia link");
+				if (!doesDocumentContainWikipediaElements(toPasteHTML)) {
+					console.log(
+						"no wikipedia elements found in pasted text - pasting as is",
+					);
+					return;
 				}
 
-				if (doesDocumentHaveCitations(toPasteHTML)) {
-					console.log("has citations");
-					toPasteHTML = removeCitations(toPasteHTML);
-				} else {
-					console.log("does not have citations");
-				}
+				toPasteHTML = replaceWikipediaLinks(toPasteHTML);
+				toPasteHTML = removeCitations(toPasteHTML);
 
 				console.log("after HTML:\n", toPasteHTML);
 
@@ -67,6 +63,20 @@ export default class WikipediaLatexPastePlugin extends Plugin {
 	onunload() {
 		console.log("plugin ended");
 	}
+}
+
+function doesDocumentContainWikipediaElements(document: Document): boolean {
+	const wikipediaElementCheckers = [
+		doesDocumentHaveWikipediaLinks,
+		doesDocumentHaveCitations,
+	];
+
+	for (let i = 0; i < wikipediaElementCheckers.length; i++) {
+		if (wikipediaElementCheckers[i](document)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 function doesDocumentHaveWikipediaLinks(document: Document): boolean {
