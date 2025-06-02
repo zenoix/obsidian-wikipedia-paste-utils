@@ -2,6 +2,9 @@ import { MarkdownView, Plugin } from "obsidian";
 
 const WIKIPEDIA_LINK_SELECTOR = 'a[href*=".wikipedia.org/wiki/"]';
 const WIKIPEDIA_CITATION_SELECTOR = 'sup.reference[id^="cite_ref"]';
+const WIKIPEDIA_INLINE_LATEX_SELECTOR = "body > span.mwe-math-element-inline";
+
+const WIKIPEDIA_LATEX_EXTRACT = /\{\\displaystyle (.*) ?\}/;
 
 export default class WikipediaLatexPastePlugin extends Plugin {
 	parser = new DOMParser();
@@ -50,6 +53,7 @@ export default class WikipediaLatexPastePlugin extends Plugin {
 
 				toPasteHTML = replaceWikipediaLinks(toPasteHTML);
 				toPasteHTML = removeCitations(toPasteHTML);
+				toPasteHTML = replaceInlineLatex(toPasteHTML);
 
 				console.log("after HTML:\n", toPasteHTML);
 
@@ -69,6 +73,7 @@ function doesDocumentContainWikipediaElements(document: Document): boolean {
 	const wikipediaElementCheckers = [
 		doesDocumentHaveWikipediaLinks,
 		doesDocumentHaveCitations,
+		doesDocumentHaveInlineLatex,
 	];
 
 	for (let i = 0; i < wikipediaElementCheckers.length; i++) {
@@ -102,6 +107,40 @@ function removeCitations(document: Document): Document {
 		WIKIPEDIA_CITATION_SELECTOR,
 	)) {
 		citation.remove();
+	}
+	return document;
+}
+
+function doesDocumentHaveInlineLatex(document: Document): boolean {
+	return (
+		document.querySelectorAll(WIKIPEDIA_INLINE_LATEX_SELECTOR).length > 0
+	);
+}
+
+function extractLatexFromAltText(alttext: string): string {
+	const matches = alttext.match(WIKIPEDIA_LATEX_EXTRACT);
+
+	console.log(matches);
+	if (matches == null) {
+		return "";
+	}
+	return matches[1].trim();
+}
+
+function replaceInlineLatex(document: Document): Document {
+	for (const inlineLatexContainingSpan of document.querySelectorAll(
+		WIKIPEDIA_INLINE_LATEX_SELECTOR,
+	)) {
+		const rawLatex = inlineLatexContainingSpan
+			.getElementsByTagName("math")[0]
+			.getAttribute("alttext");
+
+		if (rawLatex == null) {
+			continue;
+		}
+
+		const latex = extractLatexFromAltText(rawLatex);
+		inlineLatexContainingSpan.replaceWith(`$${latex}$`);
 	}
 	return document;
 }
