@@ -1,4 +1,9 @@
 import { MarkdownView, Plugin } from "obsidian";
+import {
+	DEFAULT_SETTINGS,
+	WikipediaPastePluginSettingTab,
+	WikipediaPastePluginSettings,
+} from "./settings";
 
 const WIKIPEDIA_LINK_SELECTOR = 'a[href*=".wikipedia.org/wiki/"]';
 const WIKIPEDIA_CITATION_SELECTOR = 'sup.reference[id^="cite_ref"]';
@@ -11,10 +16,14 @@ const WIKIPEDIA_DL_BLOCK_LATEX_MATH_SELECTOR =
 const WIKIPEDIA_LATEX_EXTRACT = /\{\\displaystyle (.*) ?\}/;
 
 export default class WikipediaPastePlugin extends Plugin {
+	settings: WikipediaPastePluginSettings;
 	parser = new DOMParser();
 
 	async onload() {
 		console.log("plugin started");
+
+		await this.loadSettings();
+		this.addSettingTab(new WikipediaPastePluginSettingTab(this.app, this));
 
 		this.registerEvent(
 			this.app.workspace.on("editor-paste", (evt) => {
@@ -73,6 +82,18 @@ export default class WikipediaPastePlugin extends Plugin {
 
 	onunload() {
 		console.log("plugin ended");
+	}
+
+	async loadSettings() {
+		this.settings = Object.assign(
+			{},
+			DEFAULT_SETTINGS,
+			await this.loadData(),
+		);
+	}
+
+	async saveSettings() {
+		await this.saveData(this.settings);
 	}
 }
 
