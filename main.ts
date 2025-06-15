@@ -10,7 +10,7 @@ const WIKIPEDIA_DL_BLOCK_LATEX_MATH_SELECTOR =
 
 const WIKIPEDIA_LATEX_EXTRACT = /\{\\displaystyle (.*) ?\}/;
 
-export default class WikipediaLatexPastePlugin extends Plugin {
+export default class WikipediaPastePlugin extends Plugin {
 	parser = new DOMParser();
 
 	async onload() {
