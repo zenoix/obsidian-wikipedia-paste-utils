@@ -41,6 +41,8 @@ export default class WikipediaLatexPastePlugin extends Plugin {
 					return;
 				}
 
+				console.log(`raw paste:\n`, pastedHTML);
+
 				let toPasteHTML = this.parser.parseFromString(
 					pastedHTML,
 					"text/html",
