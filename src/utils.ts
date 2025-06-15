@@ -16,8 +16,33 @@ export class Logger {
 		this.plugin = plugin;
 	}
 
-	protected formatLog(level: LogLevelStrings, ...args: any[]): string {
-		return `${new Date().toISOString()} ${level} ${args.join(" ")}`;
+	protected parseArgs(args: any[]): string[] {
+		let output = [];
+		for (const arg of args) {
+			switch (typeof arg) {
+				case "string":
+					output.push(arg);
+					break;
+
+				case "object":
+					if (arg instanceof Document) {
+						output.push(arg.documentElement.innerHTML);
+					} else {
+						output.push(JSON.stringify(arg));
+					}
+					break;
+
+				default:
+					output.push(arg.toString());
+			}
+		}
+		console.log(output.length);
+		return output;
+	}
+
+	protected formatLog(level: LogLevelStrings, args: any[]): string {
+		const parsedArgs = this.parseArgs(args);
+		return `${new Date().toISOString()} ${level} ${parsedArgs.join(" ")}`;
 	}
 
 	debugLog(...args: any[]): void {
