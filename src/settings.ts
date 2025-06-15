@@ -1,6 +1,5 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import WikipediaPastePlugin from "./main";
-import { debugLog } from "./utils";
 
 export interface WikipediaPastePluginSettings {
 	debugMode: boolean;
@@ -31,7 +30,10 @@ export class WikipediaPastePluginSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.debugMode)
 					.onChange(async (value) => {
 						this.plugin.settings.debugMode = value;
-						debugLog("debug mode", value ? "on" : "off");
+						this.plugin.logger.debugLog(
+							"debug mode",
+							value ? "on" : "off",
+						);
 						await this.plugin.saveSettings();
 					});
 			});

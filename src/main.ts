@@ -4,6 +4,7 @@ import {
 	WikipediaPastePluginSettingTab,
 	WikipediaPastePluginSettings,
 } from "./settings";
+import { Logger } from "./utils";
 
 const WIKIPEDIA_LINK_SELECTOR = 'a[href*=".wikipedia.org/wiki/"]';
 const WIKIPEDIA_CITATION_SELECTOR = 'sup.reference[id^="cite_ref"]';
@@ -17,13 +18,15 @@ const WIKIPEDIA_LATEX_EXTRACT = /\{\\displaystyle (.*) ?\}/;
 
 export default class WikipediaPastePlugin extends Plugin {
 	settings: WikipediaPastePluginSettings;
+	logger = new Logger(this);
 	parser = new DOMParser();
 
 	async onload() {
-		console.log("plugin started");
-
 		await this.loadSettings();
 		this.addSettingTab(new WikipediaPastePluginSettingTab(this.app, this));
+
+		const logger = this.logger;
+		logger.debugLog("plugin started");
 
 		this.registerEvent(
 			this.app.workspace.on("editor-paste", (evt) => {
@@ -46,21 +49,21 @@ export default class WikipediaPastePlugin extends Plugin {
 
 				// Check if the paste only contains plain text
 				if (pastedHTML == null || pastedHTML?.length == 0) {
-					console.log(`non-html paste detected: ${pastedPlain}`);
+					logger.debugLog(`non-html paste detected: ${pastedPlain}`);
 					return;
 				}
 
-				console.log(`raw paste:\n`, pastedHTML);
+				logger.debugLog(`raw paste:\n`, pastedHTML);
 
 				let toPasteHTML = this.parser.parseFromString(
 					pastedHTML,
 					"text/html",
 				);
 
-				console.log(`before HTML:\n`, toPasteHTML);
+				logger.debugLog(`before HTML:\n`, toPasteHTML);
 
 				if (!doesDocumentContainWikipediaElements(toPasteHTML)) {
-					console.log(
+					logger.debugLog(
 						"no wikipedia elements found in pasted text - pasting as is",
 					);
 					return;
@@ -71,7 +74,7 @@ export default class WikipediaPastePlugin extends Plugin {
 				replaceInlineLatex(toPasteHTML);
 				replaceBlockLatex(toPasteHTML);
 
-				console.log("after HTML:\n", toPasteHTML);
+				logger.debugLog("after HTML:\n", toPasteHTML);
 
 				view.editor.replaceSelection(toPasteHTML.body.getText());
 
@@ -81,7 +84,7 @@ export default class WikipediaPastePlugin extends Plugin {
 	}
 
 	onunload() {
-		console.log("plugin ended");
+		this.logger.debugLog("plugin ended");
 	}
 
 	async loadSettings() {
@@ -157,8 +160,6 @@ function doesDocumentHaveInlineLatex(document: Document): boolean {
 
 function extractLatexFromAltText(alttext: string): string {
 	const matches = alttext.match(WIKIPEDIA_LATEX_EXTRACT);
-
-	console.log(matches);
 	if (matches == null) {
 		return "";
 	}
