@@ -26,7 +26,9 @@ export class WikipediaPastePluginSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Debug Mode")
-			.setDesc("Toggle debug mode")
+			.setDesc(
+				"Enabling debug mode turn on logs to the Obsidian console.",
+			)
 			.addToggle((value) => {
 				value
 					.setValue(this.plugin.settings.debugMode)
