@@ -91,8 +91,20 @@ function doesDocumentHaveWikipediaLinks(document: Document): boolean {
 function replaceWikipediaLinks(document: Document): void {
 	for (const link of document.querySelectorAll(WIKIPEDIA_LINK_SELECTOR)) {
 		const linkTitle = link.getAttribute("title");
-		const linkText = link.getText();
-		link.replaceWith(`[[${linkTitle}|${linkText}]]`);
+		let linkText = link.getText();
+
+		const linkHref = link.getAttribute("href");
+
+		// A '#' in the href means that the link is linking to a header in a page
+		if (!linkHref?.includes("#")) {
+			link.replaceWith(`[[${linkTitle}|${linkText}]]`);
+			return;
+		}
+
+		const splitHref = linkHref.split("#");
+		const header = splitHref[splitHref.length - 1];
+		linkText = linkText.split("#")[0];
+		link.replaceWith(`[[${linkTitle}#${header}|${linkText}]]`);
 	}
 }
 
