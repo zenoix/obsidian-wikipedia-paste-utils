@@ -51,9 +51,9 @@ export default class WikipediaLatexPastePlugin extends Plugin {
 					return;
 				}
 
-				toPasteHTML = replaceWikipediaLinks(toPasteHTML);
-				toPasteHTML = removeCitations(toPasteHTML);
-				toPasteHTML = replaceInlineLatex(toPasteHTML);
+				replaceWikipediaLinks(toPasteHTML);
+				removeCitations(toPasteHTML);
+				replaceInlineLatex(toPasteHTML);
 
 				console.log("after HTML:\n", toPasteHTML);
 
@@ -88,27 +88,24 @@ function doesDocumentHaveWikipediaLinks(document: Document): boolean {
 	return document.querySelectorAll(WIKIPEDIA_LINK_SELECTOR).length > 0;
 }
 
-function replaceWikipediaLinks(document: Document): Document {
+function replaceWikipediaLinks(document: Document): void {
 	for (const link of document.querySelectorAll(WIKIPEDIA_LINK_SELECTOR)) {
 		const linkTitle = link.getAttribute("title");
 		const linkText = link.getText();
 		link.replaceWith(`[[${linkTitle}|${linkText}]]`);
 	}
-
-	return document;
 }
 
 function doesDocumentHaveCitations(document: Document): boolean {
 	return document.querySelectorAll(WIKIPEDIA_CITATION_SELECTOR).length > 0;
 }
 
-function removeCitations(document: Document): Document {
+function removeCitations(document: Document): void {
 	for (const citation of document.querySelectorAll(
 		WIKIPEDIA_CITATION_SELECTOR,
 	)) {
 		citation.remove();
 	}
-	return document;
 }
 
 function doesDocumentHaveInlineLatex(document: Document): boolean {
@@ -127,7 +124,7 @@ function extractLatexFromAltText(alttext: string): string {
 	return matches[1].trim();
 }
 
-function replaceInlineLatex(document: Document): Document {
+function replaceInlineLatex(document: Document): void {
 	for (const inlineLatexContainingSpan of document.querySelectorAll(
 		WIKIPEDIA_INLINE_LATEX_SELECTOR,
 	)) {
@@ -142,5 +139,4 @@ function replaceInlineLatex(document: Document): Document {
 		const latex = extractLatexFromAltText(rawLatex);
 		inlineLatexContainingSpan.replaceWith(`$${latex}$`);
 	}
-	return document;
 }
