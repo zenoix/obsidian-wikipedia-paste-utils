@@ -2,7 +2,7 @@ import { MarkdownView, Plugin } from "obsidian";
 
 const WIKIPEDIA_LINK_SELECTOR = 'a[href*=".wikipedia.org/wiki/"]';
 const WIKIPEDIA_CITATION_SELECTOR = 'sup.reference[id^="cite_ref"]';
-const WIKIPEDIA_INLINE_LATEX_SELECTOR = "body > span.mwe-math-element-inline";
+const WIKIPEDIA_INLINE_LATEX_SELECTOR = "body span.mwe-math-element-inline";
 const WIKIPEDIA_SPAN_BLOCK_LATEX_MATH_SELECTOR =
 	"body span.mwe-math-element-block";
 const WIKIPEDIA_DL_BLOCK_LATEX_MATH_SELECTOR =
