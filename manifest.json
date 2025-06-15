@@ -2,10 +2,9 @@
 	"id": "obsidian-wikipedia-paste-utils",
 	"name": "Wikipedia Paste Utilities",
 	"version": "0.0.1",
-	"minAppVersion": "0.15.0",
+	"minAppVersion": "1.8.10",
 	"description": "A few useful utilities for pasting text from Wikipedia.",
 	"author": "zenoix",
 	"authorUrl": "https://www.zenoix.com",
-	"fundingUrl": "",
 	"isDesktopOnly": false
 }
