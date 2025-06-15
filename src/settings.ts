@@ -22,6 +22,8 @@ export class WikipediaPastePluginSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
+		new Setting(containerEl).setHeading().setName("Development");
+
 		new Setting(containerEl)
 			.setName("Debug Mode")
 			.setDesc("Toggle debug mode")
