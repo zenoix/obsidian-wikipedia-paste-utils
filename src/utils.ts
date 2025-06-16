@@ -36,7 +36,6 @@ export class Logger {
 					output.push(arg.toString());
 			}
 		}
-		console.log(output.length);
 		return output;
 	}
 
