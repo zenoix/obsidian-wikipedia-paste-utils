@@ -1,4 +1,5 @@
 import WikipediaPastePlugin from "./main";
+import { UNICODE_LATEX_MAP } from "./unicodeLatexMap";
 
 const WIKIPEDIA_LATEX_EXTRACT = /\{\\displaystyle (.*) ?\}/;
 
@@ -61,4 +62,33 @@ export function extractLatexFromAltText(alttext: string): string {
 		return "";
 	}
 	return matches[1].trim();
+}
+
+export function parseUnicodeToLatex(input: string): string {
+	const unicodeCodePoint = input.codePointAt(0);
+	if (!unicodeCodePoint) {
+		return input;
+	}
+
+	let hex = unicodeCodePoint.toString(16);
+	let unicode;
+
+	switch (hex.length) {
+		case 1:
+			unicode = "U+000" + hex;
+			break;
+		case 2:
+			unicode = "U+00" + hex;
+			break;
+
+		case 3:
+			unicode = "U+0" + hex;
+			break;
+
+		default:
+			unicode = "U+" + hex;
+			break;
+	}
+
+	return UNICODE_LATEX_MAP.get(unicode.toUpperCase()) || input;
 }
