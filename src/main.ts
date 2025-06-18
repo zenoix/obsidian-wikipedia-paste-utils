@@ -6,10 +6,12 @@ import {
 } from "./wikipediaElements/citationElements";
 import {
 	doesDocumentHaveInlineLatex,
-	doesDocumentHaveBlockLatex,
 	replaceInlineLatex,
+} from "./wikipediaElements/inlineLatexElements";
+import {
+	doesDocumentHaveBlockLatex,
 	replaceBlockLatex,
-} from "./wikipediaElements/latexElements";
+} from "./wikipediaElements/blockLatexElements";
 import {
 	doesDocumentHaveWikipediaLinks,
 	replaceWikipediaLinks,

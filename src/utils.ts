@@ -1,5 +1,7 @@
 import WikipediaPastePlugin from "./main";
 
+const WIKIPEDIA_LATEX_EXTRACT = /\{\\displaystyle (.*) ?\}/;
+
 enum LogLevel {
 	ERROR,
 	WARN,
@@ -51,4 +53,12 @@ export class Logger {
 		const logMessage = this.formatLog("DEBUG", args);
 		console.log(logMessage);
 	}
+}
+
+export function extractLatexFromAltText(alttext: string): string {
+	const matches = alttext.match(WIKIPEDIA_LATEX_EXTRACT);
+	if (matches == null) {
+		return "";
+	}
+	return matches[1].trim();
 }
