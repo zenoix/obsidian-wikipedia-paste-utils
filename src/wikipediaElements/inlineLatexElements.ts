@@ -2,12 +2,17 @@ import { extractLatexFromAltText, parseUnicodeToLatex } from "src/utils";
 
 const MWL_MATH_ELEMENT_INLINE_SELECTOR = "body span.mwe-math-element-inline";
 const TEXHTML_SPAM_SELECTOR = "body span.texhtml";
+const SUP_SELECTOR = "sup";
 
 export function doesDocumentHaveInlineLatex(document: Document): boolean {
 	const inlineLatexCount =
 		document.querySelectorAll(MWL_MATH_ELEMENT_INLINE_SELECTOR).length +
 		document.querySelectorAll(TEXHTML_SPAM_SELECTOR).length;
 	return inlineLatexCount > 0;
+}
+
+function translateSupElements(htmlString: string): string {
+	return htmlString.replace(/<sup>/g, "^{").replace(/<\/sup>/g, "}");
 }
 
 export function replaceInlineLatex(document: Document): void {
@@ -23,14 +28,14 @@ export function replaceInlineLatex(document: Document): void {
 		}
 
 		const latex = extractLatexFromAltText(rawLatex);
-		inlineLatexContainingSpan.replaceWith(`$${latex}$`);
+		inlineLatexContainingSpan.replaceWith(`$${latex} $`);
 	}
 
-	// TODO: Sup and sub tags
 	for (const inlineLatexContainingSpan of document.querySelectorAll(
 		TEXHTML_SPAM_SELECTOR,
 	)) {
-		const text = inlineLatexContainingSpan.textContent;
+		const text = inlineLatexContainingSpan.innerHTML;
+		console.log(text);
 		if (text == null) {
 			continue;
 		}
@@ -40,6 +45,8 @@ export function replaceInlineLatex(document: Document): void {
 		for (const char of text) {
 			latex += parseUnicodeToLatex(char);
 		}
+
+		latex = translateSupElements(latex);
 
 		inlineLatexContainingSpan.replaceWith(`$${latex}$`);
 	}
