@@ -14,6 +14,10 @@ function translateSupElements(htmlString: string): string {
 	return htmlString.replace(/<sup>/g, "^{").replace(/<\/sup>/g, "}");
 }
 
+function translateSubElements(htmlString: string): string {
+	return htmlString.replace(/<sub>/g, "_{").replace(/<\/sub>/g, "}");
+}
+
 export function replaceInlineLatex(document: Document): void {
 	for (const inlineLatexContainingSpan of document.querySelectorAll(
 		MWL_MATH_ELEMENT_INLINE_SELECTOR,
@@ -46,6 +50,7 @@ export function replaceInlineLatex(document: Document): void {
 		}
 
 		latex = translateSupElements(latex);
+		latex = translateSubElements(latex);
 
 		inlineLatexContainingSpan.replaceWith(`$${latex}$`);
 	}
