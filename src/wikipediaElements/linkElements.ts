@@ -1,4 +1,4 @@
-const WIKIPEDIA_LINK_SELECTOR = 'a[href*=".wikipedia.org/wiki/"]';
+const WIKIPEDIA_LINK_SELECTOR = 'body > a[href*=".wikipedia.org/wiki/"]';
 
 export function doesDocumentHaveWikipediaLinks(document: Document): boolean {
 	return document.querySelectorAll(WIKIPEDIA_LINK_SELECTOR).length > 0;
