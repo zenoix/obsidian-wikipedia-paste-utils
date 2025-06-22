@@ -85,7 +85,9 @@ export default class WikipediaPastePlugin extends Plugin {
 
 				logger.debugLog("after HTML:\n", toPasteHTML);
 
-				view.editor.replaceSelection(toPasteHTML.body.getText());
+				view.editor.replaceSelection(
+					toPasteHTML.body.textContent || "",
+				);
 
 				evt.preventDefault();
 			}),
