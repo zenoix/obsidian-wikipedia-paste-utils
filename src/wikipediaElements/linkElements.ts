@@ -5,7 +5,7 @@ export function doesDocumentHaveWikipediaLinks(document: Document): boolean {
 }
 
 export function replaceWikipediaLinks(document: Document): void {
-	for (const link of document.querySelectorAll(WIKIPEDIA_LINK_SELECTOR)) {
+	document.querySelectorAll(WIKIPEDIA_LINK_SELECTOR).forEach((link) => {
 		const linkTitle = link.getAttribute("title");
 		let linkText = link.textContent;
 
@@ -21,5 +21,5 @@ export function replaceWikipediaLinks(document: Document): void {
 		const header = splitHref[splitHref.length - 1];
 		linkText = (linkText || "").split("#")[0];
 		link.replaceWith(`[[${linkTitle}#${header}|${linkText}]]`);
-	}
+	});
 }
