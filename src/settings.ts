@@ -2,10 +2,12 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 import WikipediaPastePlugin from "./main";
 
 export interface WikipediaPastePluginSettings {
+	enableLinkTranslating: boolean;
 	debugMode: boolean;
 }
 
 export const DEFAULT_SETTINGS: Partial<WikipediaPastePluginSettings> = {
+	enableLinkTranslating: true,
 	debugMode: false,
 };
 
@@ -21,6 +23,29 @@ export class WikipediaPastePluginSettingTab extends PluginSettingTab {
 		let { containerEl } = this;
 
 		containerEl.empty();
+
+		new Setting(containerEl)
+			.setHeading()
+			.setName("Wikipedia Links")
+			.setDesc("Settings related to Wikipedia article links.");
+
+		new Setting(containerEl)
+			.setName("Enable Wikipedia Link Translating")
+			.setDesc(
+				"Toggling this option will enable the translating of Wikipedia links into Obsidian's double square bracket links.",
+			)
+			.addToggle((value) => {
+				value
+					.setValue(this.plugin.settings.enableLinkTranslating)
+					.onChange(async (value) => {
+						this.plugin.settings.enableLinkTranslating = value;
+						this.plugin.logger.debugLog(
+							"wikipedia link translating",
+							value ? "on" : "off",
+						);
+						await this.plugin.saveSettings();
+					});
+			});
 
 		new Setting(containerEl).setHeading().setName("Development");
 

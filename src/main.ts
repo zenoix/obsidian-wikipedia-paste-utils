@@ -78,7 +78,9 @@ export default class WikipediaPastePlugin extends Plugin {
 					return;
 				}
 
-				replaceWikipediaLinks(toPasteHTML);
+				if (this.settings.enableLinkTranslating) {
+					replaceWikipediaLinks(toPasteHTML);
+				}
 				removeCitations(toPasteHTML);
 				replaceInlineLatex(toPasteHTML);
 				replaceBlockLatex(toPasteHTML);
