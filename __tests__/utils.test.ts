@@ -1,4 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
+/// <reference types="@vitest/browser/providers/playwright" />
+
+import { expect, describe, test } from "vitest";
 import { extractLatexFromAltText } from "src/utils";
 
 describe("extractLatexFromAltText - has latex", () => {
