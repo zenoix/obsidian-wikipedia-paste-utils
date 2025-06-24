@@ -3,11 +3,13 @@ import WikipediaPastePlugin from "./main";
 
 export interface WikipediaPastePluginSettings {
 	enableLinkTranslating: boolean;
+	enableCitationRemoval: boolean;
 	debugMode: boolean;
 }
 
 export const DEFAULT_SETTINGS: Partial<WikipediaPastePluginSettings> = {
 	enableLinkTranslating: true,
+	enableCitationRemoval: true,
 	debugMode: false,
 };
 
@@ -41,6 +43,29 @@ export class WikipediaPastePluginSettingTab extends PluginSettingTab {
 						this.plugin.settings.enableLinkTranslating = value;
 						this.plugin.logger.debugLog(
 							"wikipedia link translating",
+							value ? "on" : "off",
+						);
+						await this.plugin.saveSettings();
+					});
+			});
+
+		new Setting(containerEl)
+			.setHeading()
+			.setName("Citations")
+			.setDesc("Settings related to Wikipedia citations.");
+
+		new Setting(containerEl)
+			.setName("Enable Wikipedia Citation Removal")
+			.setDesc(
+				"Toggling this option will enable the removal of Wikipedia citations.",
+			)
+			.addToggle((value) => {
+				value
+					.setValue(this.plugin.settings.enableCitationRemoval)
+					.onChange(async (value) => {
+						this.plugin.settings.enableCitationRemoval = value;
+						this.plugin.logger.debugLog(
+							"citation removal",
 							value ? "on" : "off",
 						);
 						await this.plugin.saveSettings();
