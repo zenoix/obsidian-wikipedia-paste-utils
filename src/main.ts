@@ -3,6 +3,7 @@ import { MarkdownView, Plugin } from "obsidian";
 import {
 	doesDocumentHaveCitations,
 	removeCitations,
+	keepCitations,
 } from "./wikipediaElements/citationElements";
 import {
 	doesDocumentHaveInlineLatex,
@@ -84,6 +85,12 @@ export default class WikipediaPastePlugin extends Plugin {
 
 				if (this.settings.enableCitationRemoval) {
 					removeCitations(toPasteHTML);
+				} else {
+					console.log(this.settings.keptCitationPasteMethod);
+					keepCitations(
+						toPasteHTML,
+						this.settings.keptCitationPasteMethod,
+					);
 				}
 
 				replaceInlineLatex(toPasteHTML);
