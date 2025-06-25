@@ -2,6 +2,8 @@ import { describe, expect, test } from "vitest";
 import {
 	doesDocumentHaveCitations,
 	removeCitations,
+	keepCitations,
+	KeptCitationPasteMethod,
 } from "src/wikipediaElements/citationElements";
 
 describe("doesDocumentHaveCitations", () => {
@@ -116,6 +118,77 @@ P-O Larsson - bass (1993–1995)`,
 			removeCitations(doc);
 			expect(doc.body.textContent?.trim()).toBe(
 				"All tracks were written by Jim Reid and William Reid.",
+			);
+		});
+	});
+});
+
+describe("keepCitations", () => {
+	test("no citations", () => {
+		const parser = new DOMParser();
+		const inputHTML = `<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body>The <b>Spanish-Portuguese War</b> between 1735 and 1737 was fought over the <a href="https://en.wikipedia.org/wiki/Banda_Oriental" title="Banda Oriental">Banda Oriental</a>, roughly present-day <a href="https://en.wikipedia.org/wiki/Uruguay" title="Uruguay">Uruguay</a>.</body></html>`;
+
+		let doc = parser.parseFromString(inputHTML, "text/html");
+		keepCitations(doc, "");
+		expect(doc.body.textContent?.trim()).toBe(
+			"The Spanish-Portuguese War between 1735 and 1737 was fought over the Banda Oriental, roughly present-day Uruguay.",
+		);
+	});
+
+	describe("keep link", () => {
+		test("test 1", () => {
+			const parser = new DOMParser();
+			const inputHTML = `<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><li><i><a href="https://en.wikipedia.org/wiki/Illuminations_(DVD)" class="mw-redirect" title="Illuminations (DVD)">Illuminations</a></i> (2001), <a href="https://en.wikipedia.org/wiki/Canadian_Recording_Industry_Association" class="mw-redirect" title="Canadian Recording Industry Association">certified platinum</a> in Canada<sup id="cite_ref-13" class="reference"><a href="https://en.wikipedia.org/wiki/The_Tea_Party_discography#cite_note-13"><span class="cite-bracket">[</span>13<span class="cite-bracket">]</span></a></sup></li></body></html>`;
+
+			let doc = parser.parseFromString(inputHTML, "text/html");
+			keepCitations(doc, KeptCitationPasteMethod.KeepLink.valueOf());
+			expect(doc.body.textContent?.trim()).toBe(
+				"Illuminations (2001), certified platinum in Canada[[13](https://en.wikipedia.org/wiki/The_Tea_Party_discography#cite_note-13)]",
+			);
+		});
+
+		test("test 2", () => {
+			const parser = new DOMParser();
+			const inputHTML = `<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body>The game had been scheduled to be released in January 1998,<sup id="cite_ref-2" class="reference"><a href="https://en.wikipedia.org/wiki/Air_Warrior_III#cite_note-2"><span class="cite-bracket">[</span>2<span class="cite-bracket">]</span></a></sup> before being pushed forward for December 15, 1997.<sup id="cite_ref-release_1-1" class="reference"><a href="https://en.wikipedia.org/wiki/Air_Warrior_III#cite_note-release-1"><span class="cite-bracket">[</span>1<span class="cite-bracket">]</span></a></sup></body></html>`;
+
+			let doc = parser.parseFromString(inputHTML, "text/html");
+			keepCitations(doc, KeptCitationPasteMethod.KeepLink.valueOf());
+			expect(doc.body.textContent?.trim()).toBe(
+				"The game had been scheduled to be released in January 1998,[[2](https://en.wikipedia.org/wiki/Air_Warrior_III#cite_note-2)] before being pushed forward for December 15, 1997.[[1](https://en.wikipedia.org/wiki/Air_Warrior_III#cite_note-release-1)]",
+			);
+		});
+		test("test 3", () => {
+			const parser = new DOMParser();
+			const inputHTML = `<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body>As of 2024, he is the only major league player to have been born in <a href="https://en.wikipedia.org/wiki/Finland" title="Finland">Finland</a>.<sup id="cite_ref-1" class="reference"><a href="https://en.wikipedia.org/wiki/John_Michaelson#cite_note-1"><span class="cite-bracket">[</span>1<span class="cite-bracket">]</span></a></sup><sup id="cite_ref-2" class="reference"><a href="https://en.wikipedia.org/wiki/John_Michaelson#cite_note-2"><span class="cite-bracket">[</span>2<span class="cite-bracket">]</span></a></sup></body></html>`;
+
+			let doc = parser.parseFromString(inputHTML, "text/html");
+			keepCitations(doc, KeptCitationPasteMethod.KeepLink.valueOf());
+			expect(doc.body.textContent?.trim()).toBe(
+				"As of 2024, he is the only major league player to have been born in Finland.[[1](https://en.wikipedia.org/wiki/John_Michaelson#cite_note-1)][[2](https://en.wikipedia.org/wiki/John_Michaelson#cite_note-2)]",
+			);
+		});
+	});
+
+	describe("remove link", () => {
+		test("test 1", () => {
+			const parser = new DOMParser();
+			const inputHTML = `<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body>In March 2015 Sidcley was loaned to <a href="https://en.wikipedia.org/wiki/Clube_Atl%C3%A9tico_Goianiense" class="mw-redirect" title="Clube Atlético Goianiense">Atlético Goianiense</a> until the end of the year.<sup id="cite_ref-2" class="reference"><a href="https://en.wikipedia.org/wiki/Sidcley#cite_note-2"><span class="cite-bracket">[</span>2<span class="cite-bracket">]</span></a></sup></body></html>`;
+
+			let doc = parser.parseFromString(inputHTML, "text/html");
+			keepCitations(doc, KeptCitationPasteMethod.RemoveLink.valueOf());
+			expect(doc.body.textContent?.trim()).toBe(
+				"In March 2015 Sidcley was loaned to Atlético Goianiense until the end of the year.[2]",
+			);
+		});
+
+		test("test 2", () => {
+			const parser = new DOMParser();
+			const inputHTML = `<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body>Wouldham was elected as <a href="https://en.wikipedia.org/wiki/Prior_(ecclesiastical)" title="Prior (ecclesiastical)">prior</a> of <a href="https://en.wikipedia.org/wiki/Rochester_Cathedral" title="Rochester Cathedral">Rochester Cathedral</a> on 24 December 1283.<sup id="cite_ref-BHOPriorRoch_1-0" class="reference"><a href="https://en.wikipedia.org/wiki/Thomas_Wouldham#cite_note-BHOPriorRoch-1"><span class="cite-bracket">[</span>1<span class="cite-bracket">]</span></a></sup> He was elected <a href="https://en.wikipedia.org/wiki/Bishop" title="Bishop">bishop</a> by the chapter but renounced the election.<sup id="cite_ref-BHORoch_2-0" class="reference"><a href="https://en.wikipedia.org/wiki/Thomas_Wouldham#cite_note-BHORoch-2"><span class="cite-bracket">[</span>2<span class="cite-bracket">]</span></a></sup></body></html>`;
+
+			let doc = parser.parseFromString(inputHTML, "text/html");
+			keepCitations(doc, KeptCitationPasteMethod.RemoveLink.valueOf());
+			expect(doc.body.textContent?.trim()).toBe(
+				"Wouldham was elected as prior of Rochester Cathedral on 24 December 1283.[1] He was elected bishop by the chapter but renounced the election.[2]",
 			);
 		});
 	});
