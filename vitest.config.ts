@@ -11,9 +11,32 @@ export default defineConfig({
 			screenshotFailures: false,
 			// https://vitest.dev/guide/browser/playwright
 			instances: [
-				{ browser: "chromium" },
-				{ browser: "firefox" },
-				{ browser: "webkit" },
+				{
+					browser: "chromium",
+					launch: {
+						executablePath:
+							import.meta.dirname +
+							"/.devbox/nix/profile/default/bin/chromium",
+					},
+				},
+				{
+					browser: "firefox",
+					launch: {
+						executablePath:
+							import.meta.dirname +
+							"/" +
+							"result/firefox-1482/firefox/firefox",
+					},
+				},
+				{
+					browser: "webkit",
+					launch: {
+						executablePath:
+							import.meta.dirname +
+							"/" +
+							"result/webkit-2158/pw_run.sh",
+					},
+				},
 			],
 		},
 		alias: {

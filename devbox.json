@@ -3,10 +3,15 @@
   "packages": [
     "pnpm@latest",
     "typescript@latest",
-    "nodejs@latest"
+    "nodejs@latest",
+    "playwright@latest",
+    "playwright-driver@latest",
+    "chromium@latest"
   ],
   "shell": {
-    "init_hook": [],
-    "scripts":   {}
+    "init_hook": [
+      "export PLAYWRIGHT_BROWSERS_PATH=$(nix build --print-out-paths nixpkgs#playwright-driver.browsers)"
+    ],
+    "scripts": {}
   }
 }
