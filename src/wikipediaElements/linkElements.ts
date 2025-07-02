@@ -28,7 +28,7 @@ export function doesDocumentHaveWikipediaLinks(document: Document): boolean {
 
 export function replaceWikipediaLinks(document: Document): void {
 	document.querySelectorAll(WIKIPEDIA_LINK_SELECTOR).forEach((link) => {
-		if (isAnchorTagWikipediaLink(link)) {
+		if (!isAnchorTagWikipediaLink(link)) {
 			return;
 		}
 
