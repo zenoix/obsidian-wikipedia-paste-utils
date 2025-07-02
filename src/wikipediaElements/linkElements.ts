@@ -39,7 +39,11 @@ export function replaceWikipediaLinks(document: Document): void {
 
 		// A '#' in the href means that the link is linking to a header in a page
 		if (!linkHref?.includes("#")) {
-			link.replaceWith(`[[${linkTitle}|${linkText}]]`);
+			if (linkTitle === linkText) {
+				link.replaceWith(`[[${linkTitle}]]`);
+			} else {
+				link.replaceWith(`[[${linkTitle}|${linkText}]]`);
+			}
 			return;
 		}
 
