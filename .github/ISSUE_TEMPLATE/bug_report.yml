@@ -1,0 +1,65 @@
+name: Bug Report
+description: Create a report to help us improve
+title: "[BUG] Issue Title"
+labels: ["bug"]
+assignees: []
+
+body:
+    - type: textarea
+      attributes:
+          label: Describe the bug
+          description: A clear and concise description of what the bug is.
+      validations:
+          required: true
+
+    - type: textarea
+      attributes:
+          label: To Reproduce
+          description: Steps to reproduce the behavior.
+          placeholder: |
+              1. Go to '...wikipedia.org/...'
+              1. Scroll down to '....'
+              1. Copy '...' and paste it into Obsidian
+              1. See error
+      validations:
+          required: true
+
+    - type: textarea
+      attributes:
+          label: Expected Behavior
+          description: A clear and concise description of what you expected to happen.
+      validations:
+          required: true
+
+    - type: textarea
+      attributes:
+          label: Raw Paste
+          description: Provide the raw paste from the Obsidian console.
+          placeholder: To access the raw paste, enable Debug Mode in the Wikipedia Paste Utils plugin settings and open up the developer console.
+      validations:
+          required: false
+
+    - type: textarea
+      attributes:
+          label: Screenshots
+          description: If applicable, add screenshots to help explain your problem.
+      validations:
+          required: false
+
+    - type: textarea
+      attributes:
+          label: Environment
+          description: Some information about the environment you're running.
+          placeholder: |
+              - OS:
+              - Obsidian version:
+      validations:
+          required: false
+
+    - type: textarea
+      attributes:
+          label: Additional Context
+          description: |
+              Add any other context or information you can provide about the problem here.
+      validations:
+          required: false
