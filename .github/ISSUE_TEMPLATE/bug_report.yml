@@ -21,6 +21,7 @@ body:
               1. Scroll down to '....'
               1. Copy '...' and paste it into Obsidian
               1. See error
+          render: markdown
       validations:
           required: true
 
