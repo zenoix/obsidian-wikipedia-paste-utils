@@ -30,8 +30,8 @@ export function replaceInlineLatex(document: Document): void {
 			continue;
 		}
 
-		const latex = extractLatexFromAltText(rawLatex);
-		inlineLatexContainingSpan.replaceWith(`$${latex} $`);
+		const latex = extractLatexFromAltText(rawLatex).trim();
+		inlineLatexContainingSpan.replaceWith(`$${latex}$`);
 	}
 
 	for (const inlineLatexContainingSpan of document.querySelectorAll(
