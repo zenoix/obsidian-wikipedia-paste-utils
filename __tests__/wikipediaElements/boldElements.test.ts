@@ -1,5 +1,8 @@
 import { describe, expect, test } from "vitest";
-import { doesDocumentHaveBoldText } from "src/wikipediaElements/boldElements";
+import {
+    doesDocumentHaveBoldText,
+    translateBoldElements,
+} from "src/wikipediaElements/boldElements";
 
 describe("doesDocumentHaveBoldText", () => {
     describe("no bold text", () => {
@@ -63,6 +66,67 @@ describe("doesDocumentHaveBoldText", () => {
                     parser.parseFromString(inputHTML, "text/html"),
                 ),
             ).toBeTruthy();
+        });
+    });
+});
+
+describe("translateBoldElements", () => {
+    describe("no bold elements", () => {
+        test("test 1", () => {
+            const parser = new DOMParser();
+            const inputHTML = `<meta http-equiv="content-type" content="text/html; charset=utf-8"><i>Tom and Jerry</i> won seven Academy Awards, while Hanna and Barbera were nominated for two others and won eight Emmy Awards. Their cartoons have become cultural icons, and their cartoon characters have appeared in other media such as films, books, and toys.`;
+
+            let doc = parser.parseFromString(inputHTML, "text/html");
+            translateBoldElements(doc);
+            expect(doc.body.textContent?.trim()).toBe(
+                "Tom and Jerry won seven Academy Awards, while Hanna and Barbera were nominated for two others and won eight Emmy Awards. Their cartoons have become cultural icons, and their cartoon characters have appeared in other media such as films, books, and toys.",
+            );
+        });
+
+        test("test 2", () => {
+            const parser = new DOMParser();
+            const inputHTML = `<meta http-equiv="content-type" content="text/html; charset=utf-8">This species is found both in forests and on moors. The larvae feed on <i><a href="https://en.wikipedia.org/wiki/Betula" class="mw-redirect" title="Betula">Betula</a></i> spp. The adult butterflies fly in June–July.`;
+
+            let doc = parser.parseFromString(inputHTML, "text/html");
+            translateBoldElements(doc);
+            expect(doc.body.textContent?.trim()).toBe(
+                "This species is found both in forests and on moors. The larvae feed on Betula spp. The adult butterflies fly in June–July.",
+            );
+        });
+    });
+
+    describe("has bold elements", () => {
+        test("test 1", () => {
+            const parser = new DOMParser();
+            const inputHTML = `<meta http-equiv="content-type" content="text/html; charset=utf-8"><b>Wysin</b> <span class="IPA" lang="pl-fonipa" style="white-space:nowrap"><a href="https://en.wikipedia.org/wiki/Help:IPA/Polish" title="Help:IPA/Polish">[ˈvɨɕin]</a></span> is a <a href="https://en.wikipedia.org/wiki/Village" title="Village">village</a> in the administrative district of <a href="https://en.wikipedia.org/wiki/Gmina_Liniewo" title="Gmina Liniewo">Gmina Liniewo</a>, within <a href="https://en.wikipedia.org/wiki/Ko%C5%9Bcierzyna_County" title="Kościerzyna County">Kościerzyna County</a>, <a href="https://en.wikipedia.org/wiki/Pomeranian_Voivodeship" title="Pomeranian Voivodeship">Pomeranian Voivodeship</a>, in northern Poland.<sup id="cite_ref-TERYT_1-0" class="reference"><a href="https://en.wikipedia.org/wiki/Wysin#cite_note-TERYT-1"><span class="cite-bracket">[</span>1<span class="cite-bracket">]</span></a></sup>`;
+
+            let doc = parser.parseFromString(inputHTML, "text/html");
+            translateBoldElements(doc);
+            expect(doc.body.textContent?.trim()).toBe(
+                "**Wysin** [ˈvɨɕin] is a village in the administrative district of Gmina Liniewo, within Kościerzyna County, Pomeranian Voivodeship, in northern Poland.[1]",
+            );
+        });
+
+        test("test 2", () => {
+            const parser = new DOMParser();
+            const inputHTML = `<meta http-equiv="content-type" content="text/html; charset=utf-8"><i><b>The Jefferson County Courier</b></i> was a <a href="https://en.wikipedia.org/wiki/Weekly_newspaper" title="Weekly newspaper">weekly newspaper</a> covering <a href="https://en.wikipedia.org/wiki/Jefferson_County,_Montana" title="Jefferson County, Montana">Jefferson County, Montana</a>.`;
+
+            let doc = parser.parseFromString(inputHTML, "text/html");
+            translateBoldElements(doc);
+            expect(doc.body.textContent?.trim()).toBe(
+                "**The Jefferson County Courier** was a weekly newspaper covering Jefferson County, Montana.",
+            );
+        });
+
+        test("test 3", () => {
+            const parser = new DOMParser();
+            const inputHTML = `<meta http-equiv="content-type" content="text/html; charset=utf-8">The <b>Dancing Hot Dog</b> is the name often used to refer to a character and an <a href="https://en.wikipedia.org/wiki/Internet_meme" title="Internet meme">Internet meme</a> that originated in 2017, after the <a href="https://en.wikipedia.org/wiki/Snapchat" title="Snapchat">Snapchat</a> mobile app released an <a href="https://en.wikipedia.org/wiki/Augmented_reality" title="Augmented reality">augmented reality</a> camera lens that includes an animated rendering of a dancing <a href="https://en.wikipedia.org/wiki/Anthropomorphic" class="mw-redirect" title="Anthropomorphic">anthropomorphic</a> hot dog.`;
+
+            let doc = parser.parseFromString(inputHTML, "text/html");
+            translateBoldElements(doc);
+            expect(doc.body.textContent?.trim()).toBe(
+                "The **Dancing Hot Dog** is the name often used to refer to a character and an Internet meme that originated in 2017, after the Snapchat mobile app released an augmented reality camera lens that includes an animated rendering of a dancing anthropomorphic hot dog.",
+            );
         });
     });
 });
