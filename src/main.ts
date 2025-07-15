@@ -17,6 +17,7 @@ import {
     doesDocumentHaveWikipediaLinks,
     replaceWikipediaLinks,
 } from "./wikipediaElements/linkElements";
+import { translateBoldElements } from "./wikipediaElements/boldElements";
 
 import {
     DEFAULT_SETTINGS,
@@ -91,6 +92,10 @@ export default class WikipediaPastePlugin extends Plugin {
                         toPasteHTML,
                         this.settings.keptCitationPasteMethod,
                     );
+                }
+
+                if (this.settings.enableBoldTranslating) {
+                    translateBoldElements(toPasteHTML);
                 }
 
                 replaceInlineLatex(toPasteHTML);
