@@ -4,6 +4,7 @@ import { KeptCitationPasteMethod } from "./wikipediaElements/citationElements";
 
 export interface WikipediaPastePluginSettings {
     enableLinkTranslating: boolean;
+    enableBoldTranslating: boolean;
     enableCitationRemoval: boolean;
     keptCitationPasteMethod: string;
     debugMode: boolean;
@@ -11,6 +12,7 @@ export interface WikipediaPastePluginSettings {
 
 export const DEFAULT_SETTINGS: Partial<WikipediaPastePluginSettings> = {
     enableLinkTranslating: true,
+    enableBoldTranslating: true,
     enableCitationRemoval: true,
     keptCitationPasteMethod: KeptCitationPasteMethod.RemoveLink.valueOf(),
     debugMode: false,
@@ -46,6 +48,29 @@ export class WikipediaPastePluginSettingTab extends PluginSettingTab {
                         this.plugin.settings.enableLinkTranslating = value;
                         this.plugin.logger.debugLog(
                             "wikipedia link translating",
+                            value ? "on" : "off",
+                        );
+                        await this.plugin.saveSettings();
+                    });
+            });
+
+        new Setting(containerEl)
+            .setHeading()
+            .setName("Bold Text")
+            .setDesc("Settings related to bold text.");
+
+        new Setting(containerEl)
+            .setName("Enable Bold Text Translating")
+            .setDesc(
+                "Toggling this option will enable the translating of bold text into markdown's double asterisks.",
+            )
+            .addToggle((value) => {
+                value
+                    .setValue(this.plugin.settings.enableBoldTranslating)
+                    .onChange(async (value) => {
+                        this.plugin.settings.enableBoldTranslating = value;
+                        this.plugin.logger.debugLog(
+                            "bold translating",
                             value ? "on" : "off",
                         );
                         await this.plugin.saveSettings();
