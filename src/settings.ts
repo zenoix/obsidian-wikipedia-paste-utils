@@ -31,7 +31,7 @@ export class WikipediaPastePluginSettingTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setHeading()
-            .setName(KeptCitationPasteMethod.RemoveLink)
+            .setName("Links")
             .setDesc("Settings related to Wikipedia article links.");
 
         new Setting(containerEl)
