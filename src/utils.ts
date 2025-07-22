@@ -1,7 +1,7 @@
 import WikipediaPastePlugin from "./main";
 import { UNICODE_LATEX_MAP } from "./unicodeLatexMap";
 
-const WIKIPEDIA_LATEX_EXTRACT = /\{\\displaystyle (.*) ?\}/;
+const WIKIPEDIA_LATEX_EXTRACT = /\{(?:\\displaystyle|\\textstyle) (.*) ?\}/;
 
 enum LogLevel {
     ERROR,
