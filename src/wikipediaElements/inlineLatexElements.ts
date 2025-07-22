@@ -1,6 +1,6 @@
 import { extractLatexFromAltText, parseUnicodeToLatex } from "src/utils";
 
-const MWL_MATH_ELEMENT_INLINE_SELECTOR = "body span.mwe-math-element-inline";
+const MWL_MATH_ELEMENT_INLINE_SELECTOR = "body > span.mwe-math-element-inline";
 const TEXHTML_SPAM_SELECTOR = "body span.texhtml";
 
 export function doesDocumentHaveInlineLatex(document: Document): boolean {
