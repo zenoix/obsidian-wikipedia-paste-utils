@@ -22,9 +22,15 @@ export function replaceInlineLatex(document: Document): void {
     for (const inlineLatexContainingSpan of document.querySelectorAll(
         MWL_MATH_ELEMENT_INLINE_SELECTOR,
     )) {
-        const rawLatex = inlineLatexContainingSpan
-            .getElementsByTagName("math")[0]
-            .getAttribute("alttext");
+        const mathElement =
+            inlineLatexContainingSpan.getElementsByTagName("math")[0];
+
+        const rawLatex =
+            mathElement != undefined
+                ? mathElement.getAttribute("alttext")
+                : inlineLatexContainingSpan
+                      .getElementsByTagName("img")[0]
+                      .getAttribute("alt");
 
         if (rawLatex == null) {
             continue;
