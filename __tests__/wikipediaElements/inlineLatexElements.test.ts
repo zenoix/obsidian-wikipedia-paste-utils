@@ -234,7 +234,7 @@ describe("replaceInlineLatex", () => {
             let doc = parser.parseFromString(inputHTML, "text/html");
             replaceInlineLatex(doc);
             expect(doc.body.textContent?.trim()).toBe(
-                String.raw`$(\lambda x.M[x])\rightarrow(\lambda y.M[y])`,
+                String.raw`$(\lambda x.M[x])\rightarrow (\lambda y.M[y])$ : α-conversion, renaming the bound variables in the expression. Used to avoid name collisions.`,
             );
         });
 
