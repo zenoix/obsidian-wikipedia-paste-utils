@@ -10,7 +10,7 @@ export function doesDocumentHaveInlineLatex(document: Document): boolean {
     return inlineLatexCount > 0;
 }
 
-function translateSupElements(htmlString: string): string {
+export function translateSupElements(htmlString: string): string {
     return htmlString.replace(/<sup>/g, "^{").replace(/<\/sup>/g, "}");
 }
 
