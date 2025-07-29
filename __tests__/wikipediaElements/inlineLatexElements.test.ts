@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import {
     doesDocumentHaveInlineLatex,
     replaceInlineLatex,
+    translateSubElements,
 } from "src/wikipediaElements/inlineLatexElements";
 
 describe("doesDocumentHaveInlineLatex", () => {
@@ -268,4 +269,94 @@ describe("replaceInlineLatex", () => {
 });
 
 describe("translateSupElements", () => {});
-describe("translateSubElements", () => {});
+
+describe("translateSubElements", () => {
+    describe("no sub elements", () => {
+        test("test 1", () => {
+            const inputHTML = String.raw`<meta http-equiv="content-type" content="text/html; charset=utf-8"><span class="mwe-math-element mwe-math-element-inline"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/78c9e857451ec29be554d6c5d28b7174e18b9d74" class="mwe-math-fallback-image-inline mw-invert skin-invert" aria-hidden="true" style="vertical-align: -1.005ex; width:30.127ex; height:3.009ex;" alt="{\displaystyle F_{X,Y}(x,y)=\operatorname {P} (X\leq x,Y\leq y)}"></span>`;
+            const output = translateSubElements(inputHTML);
+            expect(output).toBe(
+                String.raw`<meta http-equiv="content-type" content="text/html; charset=utf-8"><span class="mwe-math-element mwe-math-element-inline"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/78c9e857451ec29be554d6c5d28b7174e18b9d74" class="mwe-math-fallback-image-inline mw-invert skin-invert" aria-hidden="true" style="vertical-align: -1.005ex; width:30.127ex; height:3.009ex;" alt="{\displaystyle F_{X,Y}(x,y)=\operatorname {P} (X\leq x,Y\leq y)}"></span>`,
+            );
+        });
+
+        test("test 2", () => {
+            const inputHTML = String.raw`<meta http-equiv="content-type" content="text/html; charset=utf-8">Then the function <span class="mwe-math-element mwe-math-element-inline"><span class="mwe-math-mathml-inline mwe-math-mathml-a11y" style="display: none;"><math xmlns="http://www.w3.org/1998/Math/MathML" alttext="{\displaystyle f(g(x))\cdot g'(x)}">
+  <semantics>
+    <mrow class="MJX-TeXAtom-ORD">
+      <mstyle displaystyle="true" scriptlevel="0">
+        <mi>f</mi>
+        <mo stretchy="false">(</mo>
+        <mi>g</mi>
+        <mo stretchy="false">(</mo>
+        <mi>x</mi>
+        <mo stretchy="false">)</mo>
+        <mo stretchy="false">)</mo>
+        <mo>⋅</mo>
+        <msup>
+          <mi>g</mi>
+          <mo>′</mo>
+        </msup>
+        <mo stretchy="false">(</mo>
+        <mi>x</mi>
+        <mo stretchy="false">)</mo>
+      </mstyle>
+    </mrow>
+    
+  </semantics>
+</math></span><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/9b164cc9f2c779234d15d13811b2c137edd25198" class="mwe-math-fallback-image-inline mw-invert skin-invert" aria-hidden="true" style="vertical-align: -0.838ex; width:13.964ex; height:3.009ex;" alt="{\displaystyle f(g(x))\cdot g'(x)}"></span> is also integrable on <span class="mwe-math-element mwe-math-element-inline"><span class="mwe-math-mathml-inline mwe-math-mathml-a11y" style="display: none;"><math xmlns="http://www.w3.org/1998/Math/MathML" alttext="{\displaystyle [a,b]}">
+  <semantics>
+    <mrow class="MJX-TeXAtom-ORD">
+      <mstyle displaystyle="true" scriptlevel="0">
+        <mo stretchy="false">[</mo>
+        <mi>a</mi>
+        <mo>,</mo>
+        <mi>b</mi>
+        <mo stretchy="false">]</mo>
+      </mstyle>
+    </mrow>
+    
+  </semantics>
+</math></span><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/9c4b788fc5c637e26ee98b45f89a5c08c85f7935" class="mwe-math-fallback-image-inline mw-invert skin-invert" aria-hidden="true" style="vertical-align: -0.838ex; width:4.555ex; height:2.843ex;" alt="{\displaystyle [a,b]}"></span>.`;
+            const output = translateSubElements(inputHTML);
+            expect(output)
+                .toBe(String.raw`<meta http-equiv="content-type" content="text/html; charset=utf-8">Then the function <span class="mwe-math-element mwe-math-element-inline"><span class="mwe-math-mathml-inline mwe-math-mathml-a11y" style="display: none;"><math xmlns="http://www.w3.org/1998/Math/MathML" alttext="{\displaystyle f(g(x))\cdot g'(x)}">
+  <semantics>
+    <mrow class="MJX-TeXAtom-ORD">
+      <mstyle displaystyle="true" scriptlevel="0">
+        <mi>f</mi>
+        <mo stretchy="false">(</mo>
+        <mi>g</mi>
+        <mo stretchy="false">(</mo>
+        <mi>x</mi>
+        <mo stretchy="false">)</mo>
+        <mo stretchy="false">)</mo>
+        <mo>⋅</mo>
+        <msup>
+          <mi>g</mi>
+          <mo>′</mo>
+        </msup>
+        <mo stretchy="false">(</mo>
+        <mi>x</mi>
+        <mo stretchy="false">)</mo>
+      </mstyle>
+    </mrow>
+    
+  </semantics>
+</math></span><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/9b164cc9f2c779234d15d13811b2c137edd25198" class="mwe-math-fallback-image-inline mw-invert skin-invert" aria-hidden="true" style="vertical-align: -0.838ex; width:13.964ex; height:3.009ex;" alt="{\displaystyle f(g(x))\cdot g'(x)}"></span> is also integrable on <span class="mwe-math-element mwe-math-element-inline"><span class="mwe-math-mathml-inline mwe-math-mathml-a11y" style="display: none;"><math xmlns="http://www.w3.org/1998/Math/MathML" alttext="{\displaystyle [a,b]}">
+  <semantics>
+    <mrow class="MJX-TeXAtom-ORD">
+      <mstyle displaystyle="true" scriptlevel="0">
+        <mo stretchy="false">[</mo>
+        <mi>a</mi>
+        <mo>,</mo>
+        <mi>b</mi>
+        <mo stretchy="false">]</mo>
+      </mstyle>
+    </mrow>
+    
+  </semantics>
+</math></span><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/9c4b788fc5c637e26ee98b45f89a5c08c85f7935" class="mwe-math-fallback-image-inline mw-invert skin-invert" aria-hidden="true" style="vertical-align: -0.838ex; width:4.555ex; height:2.843ex;" alt="{\displaystyle [a,b]}"></span>.`);
+        });
+    });
+});
