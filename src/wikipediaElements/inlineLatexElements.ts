@@ -14,7 +14,7 @@ export function translateSupElements(htmlString: string): string {
     return htmlString.replace(/<sup>/g, "^{").replace(/<\/sup>/g, "}");
 }
 
-function translateSubElements(htmlString: string): string {
+export function translateSubElements(htmlString: string): string {
     return htmlString.replace(/<sub>/g, "_{").replace(/<\/sub>/g, "}");
 }
 
