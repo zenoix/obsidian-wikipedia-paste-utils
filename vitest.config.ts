@@ -25,7 +25,7 @@ export default defineConfig({
                         executablePath:
                             import.meta.dirname +
                             "/" +
-                            "result/firefox-1482/firefox/firefox",
+                            "result/firefox-1489/firefox/firefox",
                     },
                 },
             ],
