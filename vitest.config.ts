@@ -28,15 +28,6 @@ export default defineConfig({
                             "result/firefox-1482/firefox/firefox",
                     },
                 },
-                {
-                    browser: "webkit",
-                    launch: {
-                        executablePath:
-                            import.meta.dirname +
-                            "/" +
-                            "result/webkit-2158/pw_run.sh",
-                    },
-                },
             ],
         },
         alias: {
